@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+}
+
+body {
+  @apply bg-background text-foreground min-h-screen;
+}
+
+.card {
+  @apply rounded-lg border bg-card text-card-foreground shadow-sm;
+}
+
+.button {
+  @apply inline-flex items-center justify-center rounded-md text-sm font-medium;
+}
+
+/* Add any additional global styles here */

@@ -1,23 +1,30 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import SurveyForm from "./components/SurveyForm";
-import Login from "./components/Login";
-import Results from "./components/Results";
-import QRCodeGenerator from "./components/QRCodeGenerator";
+import React, { useState } from 'react';
+import { AuthProvider } from '../contexts/AuthContext';
+import Navigation from '../components/common/Navigation';
+import Footer from '../components/common/Footer';
+import HomePage from '../components/survey/HomePage';
+import SurveyForm from '../components/survey/SurveyForm';
+import ThanksPage from '../components/survey/ThanksPage';
+import AdminDashboard from '../components/admin/AdminDashboard';
+import { useAuth } from '../hooks/useAuth';
 
-function App() {
+const App = () => {
+  const [currentPage, setCurrentPage] = useState('home');
+  const { isAuthenticated } = useAuth();
+
+  if (isAuthenticated) {
+    return <AdminDashboard />;
+  }
+
   return (
-    <Router>
-      <div className="min-h-screen flex flex-col items-center bg-gray-100">
-        <h1 className="text-3xl font-bold my-4">Nettsikkerhetsundersøkelse</h1>
-        <Routes>
-          <Route path="/" element={<SurveyForm />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/results" element={<Results />} />
-          <Route path="/qrcode" element={<QRCodeGenerator />} />
-        </Routes>
-      </div>
-    </Router>
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      <Navigation />
+      {currentPage === 'home' && <HomePage onStartSurvey={() => setCurrentPage('survey')} />}
+      {currentPage === 'survey' && <SurveyForm onComplete={() => setCurrentPage('thanks')} />}
+      {currentPage === 'thanks' && <ThanksPage onReturn={() => setCurrentPage('home')} />}
+      <Footer />
+    </div>
   );
-}
+};
 
 export default App;
