@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:5000/api";
+const API_BASE_URL = "http://10.10.1.122/api";
 
 export const submitSurveyResponse = async (answers, questions) => {
   try {
