@@ -23,7 +23,7 @@ const QuestionComponent = ({ question, answer, onAnswer }) => {
           ))}
         </div>
       );
-    
+
     case 'checkbox':
       return (
         <div className="space-y-3">
@@ -33,9 +33,9 @@ const QuestionComponent = ({ question, answer, onAnswer }) => {
                 type="checkbox"
                 id={`${question.id}-${index}`}
                 value={option}
-                checked={answer?.includes(option)}
+                checked={Array.isArray(answer) ? answer.includes(option) : false}
                 onChange={(e) => {
-                  const currentAnswers = answer || [];
+                  const currentAnswers = Array.isArray(answer) ? [...answer] : [];
                   const newAnswers = e.target.checked
                     ? [...currentAnswers, option]
                     : currentAnswers.filter(a => a !== option);
@@ -55,14 +55,14 @@ const QuestionComponent = ({ question, answer, onAnswer }) => {
       return (
         <div className="space-y-4">
           <div className="flex justify-between text-sm text-gray-600">
-            <span>{question.labels[1]}</span>
-            <span>{question.labels[5]}</span>
+            <span>{question.labels?.[0] || "Low"}</span>
+            <span>{question.labels?.[question.labels.length - 1] || "High"}</span>
           </div>
           <input
             type="range"
             min={question.min}
             max={question.max}
-            value={answer || 3}
+            value={answer ?? Math.floor((question.min + question.max) / 2)}
             onChange={(e) => onAnswer(question.id, parseInt(e.target.value))}
             className="w-full"
           />
@@ -72,9 +72,9 @@ const QuestionComponent = ({ question, answer, onAnswer }) => {
     case 'text':
       return (
         <textarea
-          value={answer || ''}
+          value={answer ?? ''}
           onChange={(e) => onAnswer(question.id, e.target.value)}
-          placeholder={question.placeholder}
+          placeholder={question.placeholder || "Type your answer here..."}
           className="w-full p-2 border rounded-md h-24"
         />
       );

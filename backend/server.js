@@ -1,26 +1,23 @@
-require("dotenv").config();
-
 const express = require("express");
-const mongoose = require("mongoose");
+const cors = require("cors");
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
-if (!process.env.MONGO_URI) {
-    console.error("Error: MONGO_URI is not defined in .env file");
-    process.exit(1);
-}
+app.use(cors({
+  origin: "http://localhost:5175",
+  methods: "GET, POST, PUT, DELETE, OPTIONS",
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+}));
 
-mongoose
-    .connect(process.env.MONGO_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    })
-    .then(() => console.log("MongoDB connected successfully!"))
-    .catch((err) => console.error("MongoDB connection error:", err));
+app.use(express.json());
 
-app.get("/", (req, res) => {
-    res.send("API is running...");
+app.options("*", cors());
+
+app.post("/api/survey/submit", (req, res) => {
+  console.log("Survey data received:", req.body);
+  res.json({ message: "Survey submitted successfully!" });
 });
 
+const PORT = 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
