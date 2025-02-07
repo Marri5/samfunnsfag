@@ -3,9 +3,10 @@ const mongoose = require('mongoose');
 const responseSchema = new mongoose.Schema({
   answers: [{
     questionId: Number,
+    questionText: String,
     answer: mongoose.Schema.Types.Mixed
   }],
-  createdAt: {
+  submittedAt: {
     type: Date,
     default: Date.now
   }

@@ -4,12 +4,20 @@ const Response = require('../models/Response');
 const surveyController = {
   submitResponse: async (req, res) => {
     try {
+      const formattedAnswers = Object.entries(req.body.answers).map(([questionId, answer]) => ({
+        questionId: parseInt(questionId),
+        questionText: req.body.questions.find(q => q.id === parseInt(questionId))?.question,
+        answer
+      }));
+
       const response = new Response({
-        answers: req.body.answers
+        answers: formattedAnswers
       });
+
       await response.save();
       res.status(201).json({ message: 'Response submitted successfully' });
     } catch (error) {
+      console.error('Error submitting response:', error);
       res.status(500).json({ message: 'Server error' });
     }
   },
@@ -38,6 +46,16 @@ const surveyController = {
       });
     } catch (error) {
       res.status(500).json({ message: 'Server error' });
+    }
+  },
+
+  // Added inside the object
+  getAllResponses: async (req, res) => {
+    try {
+      const responses = await Response.find().sort({ submittedAt: -1 });
+      res.json(responses);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching responses' });
     }
   }
 };

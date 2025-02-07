@@ -1,11 +1,21 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import QuestionComponent from './QuestionComponent';
 import { useSurveyData } from '../../hooks/useSurveyData';
+import { submitSurveyResponse } from '../../utils/api';
+import QuestionComponent from './QuestionComponent';
 
 const SurveyForm = ({ onComplete }) => {
   const { currentQuestion, questions, answers, handleAnswer, handleNext, handlePrevious } = useSurveyData();
+
+  const handleSubmit = async () => {
+    try {
+      await submitSurveyResponse(answers, questions);
+      onComplete();
+    } catch (error) {
+      console.error('Failed to submit survey:', error);
+    }
+  };
 
   return (
     <Card className="max-w-2xl mx-auto m-6">
@@ -26,19 +36,19 @@ const SurveyForm = ({ onComplete }) => {
               variant="outline" 
               onClick={handlePrevious}
               disabled={currentQuestion === 0}
-              >
-                Previous
-              </Button>
-              <Button 
-                onClick={currentQuestion === questions.length - 1 ? onComplete : handleNext}
-              >
-                {currentQuestion === questions.length - 1 ? 'Submit' : 'Next'}
-              </Button>
-            </div>
+            >
+              Previous
+            </Button>
+            {currentQuestion === questions.length - 1 ? (
+              <Button onClick={handleSubmit}>Submit</Button>
+            ) : (
+              <Button onClick={handleNext}>Next</Button>
+            )}
           </div>
-        </CardContent>
-      </Card>
-    );
-  };
-  
-  export default SurveyForm;
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default SurveyForm;
