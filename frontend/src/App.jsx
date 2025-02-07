@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import { AuthProvider } from '../contexts/AuthContext';
-import Navigation from '../components/common/Navigation';
-import Footer from '../components/common/Footer';
-import HomePage from '../components/survey/HomePage';
-import SurveyForm from '../components/survey/SurveyForm';
-import ThanksPage from '../components/survey/ThanksPage';
-import AdminDashboard from '../components/admin/AdminDashboard';
-import { useAuth } from '../hooks/useAuth';
+import { AuthProvider, useAuthContext } from './contexts/AuthContext';
+import Navigation from './components/common/Navigation';
+import Footer from './components/common/Footer';
+import HomePage from './components/survey/HomePage';
+import SurveyForm from './components/survey/SurveyForm';
+import ThanksPage from './components/survey/ThanksPage';
+import AdminDashboard from './components/admin/AdminDashboard';
 
-const App = () => {
+function AppContent() {
   const [currentPage, setCurrentPage] = useState('home');
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuthContext(); // Changed from useAuth to useAuthContext
 
   if (isAuthenticated) {
     return <AdminDashboard />;
@@ -25,6 +24,15 @@ const App = () => {
       <Footer />
     </div>
   );
-};
+}
+
+// Wrap the main app with AuthProvider
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
+  );
+}
 
 export default App;

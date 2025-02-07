@@ -17,7 +17,7 @@ const QuestionComponent = ({ question, answer, onAnswer }) => {
                 className="h-4 w-4 text-blue-600"
               />
               <label htmlFor={`${question.id}-${index}`} className="text-gray-700">
-                {option}
+                {option} 
               </label>
             </div>
           ))}

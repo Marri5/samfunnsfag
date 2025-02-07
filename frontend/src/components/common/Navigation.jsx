@@ -1,9 +1,9 @@
 import React from 'react';
-import { Button } from '@/components/ui/button';
-import { useAuth } from '../../hooks/useAuth';
+import { Button } from '../ui/button';
+import { useAuthContext } from '../../contexts/AuthContext';
 
 const Navigation = () => {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout } = useAuthContext();
 
   return (
     <nav className="bg-white shadow-sm">

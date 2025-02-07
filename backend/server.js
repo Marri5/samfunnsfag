@@ -1,4 +1,4 @@
-require("dotenv").config(); // Load environment variables
+require("dotenv").config();
 
 const express = require("express");
 const mongoose = require("mongoose");
@@ -6,13 +6,11 @@ const mongoose = require("mongoose");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Make sure MONGO_URI is loaded
 if (!process.env.MONGO_URI) {
     console.error("Error: MONGO_URI is not defined in .env file");
     process.exit(1);
 }
 
-// MongoDB Connection
 mongoose
     .connect(process.env.MONGO_URI, {
         useNewUrlParser: true,
