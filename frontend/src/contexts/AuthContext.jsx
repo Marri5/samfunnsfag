@@ -1,9 +1,7 @@
 import React, { createContext, useState, useContext } from 'react';
 
-// Create context
 export const AuthContext = createContext(null);
 
-// Create provider wrapper component
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
@@ -54,7 +52,6 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// Custom hook for using the auth context
 export const useAuthContext = () => {
   const context = useContext(AuthContext);
   if (!context) {
